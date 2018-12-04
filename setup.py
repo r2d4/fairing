@@ -34,6 +34,7 @@ setuptools.setup(
         'six==1.11.0',
         'httplib2==0.12.0',
         'oauth2client==4.0.0',
+        'nbconvert',
     ],
     extras_require={
         'dev': [
