@@ -10,6 +10,7 @@ standard_library.install_aliases()
 import os
 import uuid
 import tarfile
+import hashlib
 
 def get_image_full_name(repository, name, tag):
     return "{base}:{tag}".format(
@@ -52,3 +53,6 @@ def reset_tar_mtime(tarinfo):
     tarinfo.mtime = 0
     tarinfo.name = os.path.join("/app", tarinfo.name)
     return tarinfo
+
+def md5(str):
+    return hashlib.md5(str.encode('utf-8')).hexdigest())
