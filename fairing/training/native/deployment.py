@@ -8,7 +8,7 @@ import logging
 
 from kubernetes import client as k8s_client
 
-from fairing import config
+from fairing.config import config
 from fairing import utils
 from fairing.training import base
 from fairing.backend import kubernetes
