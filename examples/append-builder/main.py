@@ -46,7 +46,7 @@ LOG_DIR = os.path.join(os.getenv('TEST_TMPDIR', '/tmp'),
                        'tensorflow/mnist/logs/fully_connected_feed/', os.getenv('HOSTNAME', ''))
 MODEL_DIR = os.path.join(LOG_DIR, 'model.ckpt')
 
-@native.Training()
+@native.Training(output=True)
 class MyModel(object):
     def train(self):
         self.data_sets = input_data.read_data_sets(INPUT_DATA_DIR)

@@ -1,0 +1,1 @@
+{"apiVersion": "batch/v1", "spec": {"parallelism": 1, "completions": 1, "template": {"spec": {"restartPolicy": "Never", "containers": [{"image": "gcr.io/mrick-gcp/fairing-job:87cb9c3b", "name": "model"}]}, "metadata": {"name": "fairing-job-989c4408", "labels": {"fairing-job-id": "fairing-job-989c4408"}}}}, "kind": "Job", "metadata": {"name": "fairing-job-989c4408"}}

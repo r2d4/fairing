@@ -5,8 +5,10 @@ from __future__ import absolute_import
 from future import standard_library
 standard_library.install_aliases()
 import logging
+import json
 
 from kubernetes import client as k8s_client
+from kubernetes.client import ApiClient
 
 from fairing import config
 from fairing import utils
@@ -23,9 +25,10 @@ class NativeDeployment(object):
             will be deployed.
         runs: Number of training(s) to be deployed. Hyperparameter search
             will generate multiple jobs.
+        output: if True, output the manifest deployed
     """
 
-    def __init__(self, namespace, runs):
+    def __init__(self, namespace, runs, output):
         if namespace is None:
             self.namespace = utils.get_default_target_namespace()
         else:
@@ -35,13 +38,14 @@ class NativeDeployment(object):
         self.name = "{}-{}".format(DEFAULT_JOB_NAME, utils.get_unique_tag())
         self.job_spec = None
         self.runs = runs
+        self.output = output
 
         self.builder = config.get_builder()
         self.backend = kubernetes.KubeManager()
 
     def execute(self):
         # Actually build and push the image, or generate ConfigMaps
-        self.builder.execute()
+        # self.builder.execute()
         
         pod_spec = self.builder.generate_pod_spec()
         pod_template_spec = self.generate_pod_template_spec(pod_spec)
@@ -50,8 +54,12 @@ class NativeDeployment(object):
         #pod_template_spec, tb_deployment = tensorboard.transform(pod_template_spec)
         #TODO:
         # pod_template_spec, pbt_deployment = pbt.transfort(pod_template_spec)
-
+        print(self.output)
         self.job_spec = self.generate_job(pod_template_spec)
+        if self.output:
+            api = ApiClient()
+            out = api.sanitize_for_serialization(self.job_spec)
+            print(json.dumps(out))
 
         #TODO: if needed, can be an extra validation step for the final template
         #self.validate(job_spec)
@@ -84,6 +92,8 @@ class NativeDeployment(object):
             completions=self.runs)
         
         return k8s_client.V1Job(
+            api_version="batch/v1",
+            kind="Job",
             metadata=k8s_client.V1ObjectMeta(
                 name=self.name
             ),
