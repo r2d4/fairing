@@ -10,6 +10,8 @@ from .utils import guess_preprocessor
 
 import requests
 
+import requests
+
 logger = logging.getLogger(__name__)
 
 

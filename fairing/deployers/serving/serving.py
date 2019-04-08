@@ -42,9 +42,13 @@ class Serving(Job):
         self.service = v1_api.create_namespaced_service(self.namespace, self.service_spec)
 
         logger.warn("Endpoint {} launched.".format(self.deployment.metadata.name))
+<<<<<<< HEAD
         url = self.backend.get_service_external_endpoint(self.service.metadata.name,
                                                          self.service.metadata.namespace,
                                                          self.service.metadata.labels)
+=======
+        url = self.backend.get_service_external_endpoint()
+>>>>>>> v0.5-branch
         return url
 
     def generate_deployment_spec(self, pod_template_spec):
@@ -79,6 +83,7 @@ class Serving(Job):
                 type="LoadBalancer",
             )
         )
+<<<<<<< HEAD
     
     def delete(self):
         v1_api = k8s_client.CoreV1Api()
@@ -103,3 +108,5 @@ class Serving(Job):
             logger.error(e)
             logger.error("Not able to delete deployment: {}/{}".format(self.deployment.metadata.namespace,
                                                                        self.deployment.metadata.name))
+=======
+>>>>>>> v0.5-branch
